@@ -2,6 +2,7 @@ name: Build Native + Deploy GitHub Pages
 
 on:
   workflow_dispatch:
+n# Workflow updated: using npm instead of bun
   push:
     branches: [main]
 
