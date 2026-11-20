@@ -17,6 +17,8 @@ concurrency:
 env:
   EXPO_NO_TELEMETRY: "1"
 
+# Trigger guard: ensure iOS builds use the app scheme, not a sub-lib scheme.
+
 jobs:
   android:
     name: Android APKs (split per ABI)
