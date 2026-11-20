@@ -1,0 +1,17 @@
+{
+  "name": "octocode-tutor-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "tutor-server.mjs",
+  "scripts": {
+    "start": "node tutor-server.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

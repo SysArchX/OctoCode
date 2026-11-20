@@ -1,0 +1,8 @@
+.env*
+.env.local*
+*.pem
+*.key
+*.apk
+*.ipa
+dist/
+node_modules/
