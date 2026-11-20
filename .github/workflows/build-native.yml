@@ -37,21 +37,60 @@ jobs:
 
       - name: Enable ABI splits in build.gradle
         run: |
-          cat > android/app/build.gradle << 'GRADLE_EOF'
-          // ... (existing content above)
-          android {
-              // ... other android config
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
 
-              splits {
-                  abi {
-                      enable true
-                      reset()
-                      include "arm64-v8a", "armeabi-v7a", "x86_64"
-                      universalApk true
-                  }
-              }
-          }
-          GRADLE_EOF
+          path = Path("android/app/build.gradle")
+          content = path.read_text()
+
+          # Check if splits block already exists
+          if "splits {" in content:
+              print("splits block already exists, skipping...")
+          else:
+              # Insert splits block before the last closing brace of android block
+              # Find the android { ... } block and add splits inside it
+              # Strategy: insert before the final '}' of the android block
+              lines = content.split('\n')
+              new_lines = []
+              android_depth = 0
+              in_android = False
+              inserted = False
+
+              for i, line in enumerate(lines):
+                  new_lines.append(line)
+
+                  if re.match(r'\s*android\s*\{', line):
+                      in_android = True
+                      android_depth = 1
+                  elif in_android:
+                      # Track brace depth
+                      android_depth += line.count('{') - line.count('}')
+
+                      # When we hit depth 0, we're at the end of android block
+                      # Insert splits block before this line
+                      if android_depth == 0 and not inserted:
+                          # Insert splits block before the closing brace
+                          indent = len(line) - len(line.lstrip())
+                          splits_block = '\n'.join([
+                              ' ' * indent + 'splits {',
+                              ' ' * indent + '    abi {',
+                              ' ' * indent + '        enable true',
+                              ' ' * indent + '        reset()',
+                              ' ' * indent + '        include "arm64-v8a", "armeabi-v7a", "x86_64"',
+                              ' ' * indent + '        universalApk true',
+                              ' ' * indent + '    }',
+                              ' ' * indent + '}',
+                          ])
+                          new_lines.insert(-1, splits_block)
+                          inserted = True
+                          print("Inserted splits block")
+
+              path.write_text('\n'.join(new_lines))
+              print("Updated build.gradle")
+              print(path.read_text()[:2000])
+
+          PY
 
       - name: Build release APKs
         working-directory: android
