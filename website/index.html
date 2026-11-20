@@ -21,7 +21,7 @@
       <div class="wrap nav-inner">
         <a class="brand" href="#top" aria-label="OctoCode, início">
           <span class="brand-mark" aria-hidden="true">
-            <span class="dot"></span><span class="angle">&lt;</span>
+            <span class="dot"></span><span class="angle"><</span>
           </span>
           <span class="brand-name">OctoCode</span>
         </a>
@@ -50,80 +50,43 @@
     <aside
       class="download-panel"
       id="download-panel"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="download-title"
-      aria-hidden="true"
+      aria-label="Central de downloads"
+      hidden
     >
-      <div class="download-head">
-        <div>
-          <span class="eyebrow">Central de downloads</span>
-          <h2 id="download-title">Escolha o pacote do seu aparelho</h2>
-        </div>
-        <button class="download-close" id="download-close" type="button" aria-label="Fechar">
-          &times;
-        </button>
-      </div>
+      <button
+        class="close-panel"
+        aria-label="Fechar central de downloads"
+      >
+        <span></span>
+      </button>
 
-      <p class="download-lede">
-        Tudo publicado na mesma página de Releases. Nenhum pacote pede conta, assinatura ou
-        loja de aplicativos.
-      </p>
-
-      <ul class="download-list">
-        <li class="download-item">
-          <span class="dl-mark">APK</span>
+      <ul>
+        <li>
+          <span class="dl-mark">Android APKs</span>
           <div class="dl-body">
-            <strong>Android APK — Universal</strong>
-            <code>OctoCode-universal.apk</code>
-            <span class="dl-meta">Todas as arquiteturas · ~38 MB · funciona em qualquer Android 7+</span>
+            <strong>Baixar aplicativo Android</strong>
+            <code>https://github.com/SysArchX/OctoCode/releases/latest</code>
+            <span class="dl-meta">4 APKs split por arquitetura</span>
           </div>
-          <a class="dl-btn" href="https://github.com/SysArchX/OctoCode/releases/latest/download/OctoCode-universal.apk" rel="noreferrer">Baixar</a>
+          <a class="dl-btn" href="https://github.com/SysArchX/OctoCode/releases/latest" rel="noreferrer">Baixar</a>
         </li>
-        <li class="download-item">
-          <span class="dl-mark">APK</span>
+        <li>
+          <span class="dl-mark">iOS IPA</span>
           <div class="dl-body">
-            <strong>Android APK — ARM64</strong>
-            <code>OctoCode-arm64-v8a.apk</code>
-            <span class="dl-meta">Celulares modernos · ~26 MB · mais leve e rápido</span>
+            <strong>Baixar IPA (unsigned)</strong>
+            <code>https://github.com/SysArchX/OctoCode/releases/latest</code>
+            <span class="dl-meta">Para AltStore / SideStore</span>
           </div>
-          <a class="dl-btn" href="https://github.com/SysArchX/OctoCode/releases/latest/download/OctoCode-arm64-v8a.apk" rel="noreferrer">Baixar</a>
+          <a class="dl-btn" href="https://github.com/SysArchX/OctoCode/releases/latest" rel="noreferrer">Baixar</a>
         </li>
-        <li class="download-item">
-          <span class="dl-mark">APK</span>
-          <div class="dl-body">
-            <strong>Android APK — ARMv7</strong>
-            <code>OctoCode-armeabi-v7a.apk</code>
-            <span class="dl-meta">Celulares mais antigos · ~24 MB · 32 bits</span>
-          </div>
-          <a class="dl-btn" href="https://github.com/SysArchX/OctoCode/releases/latest/download/OctoCode-armeabi-v7a.apk" rel="noreferrer">Baixar</a>
-        </li>
-        <li class="download-item">
-          <span class="dl-mark">APK</span>
-          <div class="dl-body">
-            <strong>Android APK — x86_64</strong>
-            <code>OctoCode-x86_64.apk</code>
-            <span class="dl-meta">Emuladores e Chromebooks · ~27 MB</span>
-          </div>
-          <a class="dl-btn" href="https://github.com/SysArchX/OctoCode/releases/latest/download/OctoCode-x86_64.apk" rel="noreferrer">Baixar</a>
-        </li>
-        <li class="download-item">
-          <span class="dl-mark">IPA</span>
-          <div class="dl-body">
-            <strong>iPhone / iOS — IPA sem assinatura</strong>
-            <code>OctoCode-unsigned.ipa</code>
-            <span class="dl-meta">~40 MB · instale via AltStore, SideStore ou assinatura própria</span>
-          </div>
-          <a class="dl-btn" href="https://github.com/SysArchX/OctoCode/releases/latest/download/OctoCode-unsigned.ipa" rel="noreferrer">Baixar</a>
-        </li>
-        <li class="download-item dl-web">
+        <li>
           <span class="dl-mark">PWA</span>
           <div class="dl-body">
             <strong>Abrir Web App / PWA</strong>
-            <code>octocode.app/pwa-app</code>
+            <code>./app/</code>
             <span class="dl-meta">iPhone e PC · tela cheia, offline e sem instalar nada</span>
           </div>
-          <a class="dl-btn" href="https://is.gd/eVUrzI">Abrir</a>
+          <a class="dl-btn" href="./app/">Abrir</a>
         </li>
       </ul>
 
@@ -155,8 +118,8 @@
               <a class="btn btn-ghost" href="https://github.com/SysArchX/OctoCode/releases/latest/download/OctoCode-unsigned.ipa" rel="noreferrer">
                 Baixar IPA <span class="btn-meta">iOS</span>
               </a>
-              <a class="btn btn-soft" href="https://is.gd/eVUrzI">
-                Abrir Web App / PWA <span class="btn-meta">iPhone &amp; PC</span>
+              <a class="btn btn-soft" href="./app/">
+                Abrir Web App / PWA <span class="btn-meta">iPhone & PC</span>
               </a>
             </div>
             <p class="fineprint">
@@ -165,361 +128,145 @@
               · progresso salvo no aparelho
             </p>
           </div>
-
-          <div class="hero-art">
-            <div class="glow"></div>
-            <div class="phone">
-              <div class="phone-top">
-                <span class="phone-brand"><span class="brand-mark small"><span class="dot"></span><span class="angle">&lt;</span></span> OctoCode</span>
-                <span class="phone-stat">🔥 12 · 💎 240</span>
-              </div>
-              <div class="phone-card">
-                <img src="./assets/mascot.png" alt="Mascote polvo do OctoCode" width="84" height="84" />
-                <div>
-                  <span class="phone-eyebrow">Boa noite, explorador</span>
-                  <strong>Sua próxima descoberta está aqui.</strong>
-                  <span class="phone-track">Python · Unidade 2 de 3</span>
-                </div>
-              </div>
-              <div class="phone-progress">
-                <div class="ring"><span>75%</span></div>
-                <div>
-                  <span class="phone-eyebrow">Meta diária</span>
-                  <strong>12 de 20 XP hoje</strong>
-                  <span class="phone-track">10 min por dia, sem pressão</span>
-                </div>
-              </div>
-              <div class="phone-continue">
-                <span>Continuar de onde parou</span>
-                <strong>Condições e desvios</strong>
-                <em>Fundamentos · 8 min · 3 exercícios</em>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
-      <section class="band" aria-label="Números do projeto">
-        <div class="wrap band-grid">
-          <div><strong>15</strong><span>trilhas completas</span></div>
-          <div><strong>4</strong><span>módulos por trilha</span></div>
-          <div><strong>5</strong><span>vidas e combo real</span></div>
-          <div><strong>100%</strong><span>offline no aparelho</span></div>
-        </div>
-      </section>
-
-      <section id="historia" class="section">
+      <section id="historia">
         <div class="wrap">
-          <header class="section-head">
-            <span class="eyebrow">História</span>
-            <h2>Como o OctoCode nasceu — e por que ele existe</h2>
-            <p>
-              O OctoCode não começou como um produto. Começou como uma constatação incômoda: muita
-              gente termina um curso de programação sem conseguir escrever um programa sozinho.
-              Assistiu tudo, entendeu nada, esqueceu na semana seguinte.
-            </p>
-          </header>
-
-          <div class="story">
-            <div class="story-copy">
-              <h3>A ideia</h3>
-              <p>
-                A ideia surgiu ao observar como o ensino de programação era ensinado na prática: o
-                aluno assiste a uma aula de 40 minutos, copia um código do slide, roda e vê a saída
-                aparecer. Ele reconhece o resultado, mas não sabe explicar por que aquilo funcionou.
-                No dia seguinte, sem o slide, trava na primeira linha. Esse é o efeito placebo da
-                educação: a sensação de aprender sem a capacidade de fazer.
-              </p>
-              <p>
-                Se o problema era o formato passivo, a solução tinha que ser o oposto. Uma lição
-                curta, de 90 segundos, seguida imediatamente de uma tarefa que o aluno não consegue
-                resolver copiando. Se ele erra, o app explica o conceito de outro jeito em vez de
-                entregar a resposta. Se ele acerta, o XP entra na hora, no mesmo aparelho, sem esperar
-                ninguém corrigir.
-              </p>
-
-              <h3>A construção</h3>
-              <p>
-                O app foi escrito com React Native e Expo, com TypeScript em todo o código, e roda
-                nativo em Android e iOS a partir de uma base única. O design visual muda por
-                plataforma: Material 3 Expressive no Android, Liquid Glass no iPhone. O progresso,
-                as notas e o histórico do terminal ficam no próprio aparelho, em armazenamento
-                local, então nada para de funcionar quando a internet cai.
-              </p>
-              <p>
-                O currículo foi montado sobre documentação oficial — Python.org, MDN, cppreference,
-                The Rust Book, PostgreSQL, OWASP — e cada aula carrega o selo da fonte que a sustenta.
-                A trilha começa em Portugol, porque a sintaxe é a parte fácil; o que precisa ser
-                treinado primeiro é a lógica. Depois, o mesmo algoritmo aparece lado a lado na
-                linguagem escolhida.
-              </p>
-              <p>
-                Por cima disso existe o <strong>OctoCoreOS 1.0</strong>: uma microdistro simulada
-                dentro do app, com sistema de arquivos virtual, usuários, grupos, permissões POSIX
-                reais e o <code>octofetch</code>. Ela existe porque permissão de arquivo, processo e
-                rede só se aprendem digitando — e ninguém deveria precisar formatar um notebook para
-                treinar <code>chmod</code>.
-              </p>
-            </div>
-
-            <aside class="creator-card">
-              <img src="./assets/mascot.png" alt="" width="72" height="72" />
-              <span class="eyebrow">Criador</span>
-              <h3>Lázaro · SysArchX</h3>
-              <p>
-                Desenvolvedor e autor do projeto. Escreveu o currículo, o interpretador do
-                OctoCoreOS, o servidor do OctoAI e o app — do primeiro rascunho de Portugol até os
-                instaladores assinados.
-              </p>
-              <a class="btn btn-small" href="https://github.com/SysArchX/OctoCode" rel="noreferrer">
-                Código aberto no GitHub
-              </a>
-              <dl class="creator-facts">
-                <div><dt>Stack</dt><dd>React Native · Expo · TypeScript</dd></div>
-                <div><dt>Extras</dt><dd>Supabase · Node · OpenRouter</dd></div>
-                <div><dt>Licença</dt><dd>Aberto para estudo</dd></div>
-              </dl>
-            </aside>
-          </div>
-
+          <h2>História</h2>
+          <p>
+            O OctoCode nasceu da necessidade de ensinar programação de verdade, do zero.
+            Desde a ideia até a construção de aplicações reais, passando por 15 trilhas de
+            conhecimento, o OctoCode transforma a forma como você aprende lógica de programação.
+          </p>
           <div class="feature-grid">
-            <article class="feature">
-              <h4>Portugol na lógica</h4>
-              <p>Variáveis, condições e laços em português, com visualizador de memória. A base antes da sintaxe.</p>
-            </article>
-            <article class="feature">
-              <h4>Nivelamento anti-chute</h4>
-              <p>Cinco desafios digitados, sem múltipla escolha. Acertou quatro? A base é pulada com XP creditado.</p>
-            </article>
-            <article class="feature">
-              <h4>OctoCoreOS 1.0</h4>
-              <p>Terminal com permissões POSIX reais, pipes, redirecionamento e o octofetch com a arte oficial.</p>
-            </article>
-            <article class="feature">
-              <h4>Ranking global</h4>
-              <p>Placar por linguagem, sincronizado. Você compara seu XP com quem está na mesma trilha.</p>
-            </article>
-            <article class="feature">
-              <h4>Notebook offline</h4>
-              <p>Anotações por aula guardadas no aparelho, abertas sem internet e exportáveis quando quiser.</p>
-            </article>
-            <article class="feature">
-              <h4>OctoAI com filtro</h4>
-              <p>O polvo no canto explica teoria e aponta fontes. Pergunta fora de código não gasta token.</p>
-            </article>
+            <div class="feature-card">
+              <span class="feature-icon">🟦</span>
+              <h3>Portugol</h3>
+              <p>Lógica de programação visual, sem barreiras de sintaxe.</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">📚</span>
+              <h3>Nivelamento</h3>
+              <p>Teste de 5 questões com peso crescente e XP creditado na hora.</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">⚙️</span>
+              <h3>OctoCoreOS</h3>
+              <p>Terminal POSIX completo com octofetch e 15 utilidades.</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">📊</span>
+              <h3>Ranking</h3>
+              <p>language_leaderboard upsert por (device_id, language_slug).</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="jornada" class="section section-alt">
+      <section id="jornada">
         <div class="wrap">
-          <header class="section-head">
-            <span class="eyebrow">A jornada</span>
-            <h2>Do zero à primeira aplicação, sem pular etapas</h2>
-            <p>
-              Cada lição alterna leitura curta, montagem de blocos, previsão de saída, caça ao bug e
-              laboratório no terminal. Quem entra como iniciante começa pela lógica; quem já tem base
-              prova isso digitando código.
-            </p>
-          </header>
-
-          <div class="steps">
-            <article class="step">
-              <span class="step-n">01</span>
-              <h3>Portugol primeiro</h3>
-              <p>
-                <code>se</code>, <code>senao</code>, <code>enquanto</code>, <code>para</code>,
-                <code>escreva</code> e <code>leia</code> com visualizador de memória RAM. Você vê a
-                variável nascer e mudar de valor.
-              </p>
-              <span class="source">Base: CS50 + material de algoritmos</span>
-            </article>
-            <article class="step">
-              <span class="step-n">02</span>
-              <h3>A ponte para a linguagem</h3>
-              <p>
-                O mesmo algoritmo aparece lado a lado em Portugol e na linguagem escolhida. A
-                sintaxe muda, a lógica não. É aqui que o iniciante deixa de decorar.
-              </p>
-              <span class="source">Base: Python.org, MDN, cppreference</span>
-            </article>
-            <article class="step">
-              <span class="step-n">03</span>
-              <h3>Nivelamento anti-chute</h3>
-              <p>
-                Cinco desafios digitados, sem múltipla escolha. Acertou quatro? Pula a base. Errou?
-                Volta para a Unidade 1 sem punição e sem perder a trilha.
-              </p>
-              <span class="source">Regra: 4 de 5, resposta digitada</span>
-            </article>
-            <article class="step">
-              <span class="step-n">04</span>
-              <h3>Projeto final guiado</h3>
-              <p>
-                O quarto módulo de cada trilha é uma aplicação real: calculadora de terminal, API de
-                tarefas, scanner de portas com relatório. Você entrega funcionando.
-              </p>
-              <span class="source">Entrega: código rodando, não certificado</span>
-            </article>
-          </div>
-
-          <div class="contrast">
-            <div class="contrast-card bad">
-              <h4>O jeito placebo</h4>
-              <ul>
-                <li>Assistir 40 horas de vídeo e não escrever uma linha</li>
-                <li>Copiar a resposta do colega ou do fórum</li>
-                <li>Trocar de linguagem a cada semana</li>
-                <li>Terminar o curso sem nada publicado</li>
-              </ul>
-            </div>
-            <div class="contrast-card good">
-              <h4>O jeito OctoCode</h4>
-              <ul>
-                <li>Ler 90 segundos, praticar na hora, no mesmo aparelho</li>
-                <li>Editor bloqueia colagem e randomiza variáveis</li>
-                <li>Uma trilha até o projeto final antes de trocar</li>
-                <li>Terminal POSIX real simulado e relatório do que errou</li>
-              </ul>
-            </div>
-          </div>
+          <h2>Jornada de Aprendizado</h2>
+          <p>
+            Do básico ao avançado, o OctoCode guia você através de 15 trilhas de conteúdo,
+            desde lógica fundamental até conceitos avançados de cybersecurity e deployment.
+          </p>
         </div>
       </section>
 
-      <section id="terminal" class="section">
-        <div class="wrap terminal-grid">
-          <div class="terminal-copy">
-            <span class="eyebrow">OctoCoreOS</span>
-            <h2>Um Linux de treino que cabe no bolso</h2>
-            <p>
-              Uma microdistro com sistema de arquivos virtual, usuários, grupos e permissões POSIX de
-              verdade. <code>octo</code> não escreve em <code>/etc</code> sem <code>sudo</code>, e
-              script sem <code>chmod +x</code> não executa.
-            </p>
-            <ul class="check-list">
-              <li>Pipes, redirecionamento, <code>grep</code>, <code>find</code>, <code>ps</code></li>
-              <li>CyberSuite: <code>nmap</code>, <code>gobuster</code>, <code>hydra</code>, <code>sqlmap</code></li>
-              <li><code>octofetch</code> com a arte do mascote e as specs do sistema</li>
-              <li>Histórico de acertos e erros salvo no seu perfil</li>
-            </ul>
-            <p class="hint">Teste agora no navegador — é o mesmo interpretador da tela do app.</p>
-          </div>
-
-          <div class="terminal" id="demo-terminal">
-            <div class="terminal-bar">
-              <span class="t-dot"></span><span class="t-dot"></span><span class="t-dot"></span>
-              <span class="t-title">octo@octocore — octosh</span>
-            </div>
-            <div class="terminal-body" id="terminal-output" aria-live="polite"></div>
-            <form class="terminal-input" id="terminal-form" autocomplete="off">
-              <label class="t-prompt" for="terminal-field">octo@octocore:~$</label>
-              <input
-                id="terminal-field"
-                type="text"
-                placeholder="octofetch"
-                spellcheck="false"
-                autocapitalize="none"
-                autocomplete="off"
-              />
-            </form>
-            <div class="terminal-chips">
-              <button type="button" data-cmd="octofetch">octofetch</button>
-              <button type="button" data-cmd="ls -la">ls -la</button>
-              <button type="button" data-cmd="whoami">whoami</button>
-              <button type="button" data-cmd="cat /etc/shadow">cat /etc/shadow</button>
-              <button type="button" data-cmd="help">help</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="cursos" class="section section-alt">
+      <section id="terminal">
         <div class="wrap">
-          <header class="section-head">
-            <span class="eyebrow">Catálogo</span>
-            <h2>Todas as trilhas, com a fonte oficial de cada uma</h2>
-            <p>
-              Quatro módulos por trilha: fundamentos, estruturas de dados, avançado e projeto final
-              guiado. Cada aula exibe o selo da documentação que a sustenta.
-            </p>
-          </header>
-
-          <div class="cards" id="catalog"></div>
+          <h2>OctoCoreOS</h2>
+          <p>
+            Um sistema operacional simulado dentro do app, com comandos reais de terminal,
+            monitor de sistema e funcionalidades de cybersecurity educacional.
+          </p>
+          <div class="terminal-demo">
+            <code>octofetch</code>
+            <span class="output">SYSTEM: OctoCoreOS 1.0</span>
+            <span class="prompt">$</span>
+            <span class="output">$ whoami</span>
+            <span class="output">lázaro</span>
+            <span class="prompt">$</span>
+            <span class="output">$ ls</span>
+            <span class="output">dist/  node_modules/  packages/  scripts/</span>
+          </div>
         </div>
       </section>
 
-      <section id="instalar" class="section">
+      <section id="cursos">
         <div class="wrap">
-          <header class="section-head">
-            <span class="eyebrow">Instalação</span>
-            <h2>Três caminhos, nenhum certificado pago</h2>
-            <p>Escolha pelo aparelho que você tem na mão. O progresso não depende da loja.</p>
-          </header>
-
-          <div class="install-grid">
-            <article class="install-card">
-              <span class="install-tag">Android</span>
-              <h3>Instalar o APK</h3>
-              <ol>
-                <li>Abra a central de downloads pelos três tracinhos no topo.</li>
-                <li>Escolha universal, arm64, armv7 ou x86_64.</li>
-                <li>Abra o arquivo e permita "instalar de fontes desconhecidas".</li>
-                <li>Se o Play Protect avisar, toque em "instalar mesmo assim".</li>
-              </ol>
-              <button class="btn btn-small" type="button" data-open-downloads>Ver pacotes</button>
-            </article>
-
-            <article class="install-card">
-              <span class="install-tag">iPhone</span>
-              <h3>Instalar o IPA</h3>
-              <ol>
-                <li>Instale o AltStore ou o SideStore no iPhone.</li>
-                <li>Baixe o <code>OctoCode-unsigned.ipa</code>.</li>
-                <li>No AltStore, toque em "+" e escolha o arquivo.</li>
-                <li>Confie no desenvolvedor em Ajustes → Geral → VPN e Gerenciamento.</li>
-              </ol>
-              <a class="btn btn-small" href="https://github.com/SysArchX/OctoCode/releases/latest/download/OctoCode-unsigned.ipa" rel="noreferrer">Baixar IPA</a>
-            </article>
-
-            <article class="install-card">
-              <span class="install-tag">PWA</span>
-              <h3>Instalar pelo Safari</h3>
-              <ol>
-                <li>Abra o Web App no Safari do iPhone.</li>
-                <li>Toque em Compartilhar, no ícone do quadrado com a seta.</li>
-                <li>Escolha "Adicionar à Tela de Início".</li>
-                <li>Pronto: abre em tela cheia e funciona offline.</li>
-              </ol>
-              <a class="btn btn-small btn-soft" href="https://is.gd/eVUrzI">Usar Web App</a>
-            </article>
+          <h2>Cursos</h2>
+          <p>
+            15 trilhas completas cobrindo desde lógica de programação básica até
+            aplicações completas com deployment nativo.
+          </p>
+          <div class="course-grid">
+            <div class="course-card">
+              <h3>Portugol Básico</h3>
+              <p>Lógica de programação fundamental.</p>
+            </div>
+            <div class="course-card">
+              <h3>Lógica Avançada</h3>
+              <p>Estruturas de controle complexas.</p>
+            </div>
+            <div class="course-card">
+              <h3>Desenvolvimento Mobile</h3>
+              <p>Apps nativos para Android e iOS.</p>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div class="offline-note">
-            <strong>Offline de verdade.</strong> O service worker guarda a página, o mascote e os
-            estilos no cache. Depois da primeira visita, o site abre sem internet e sem depender de
-            nenhuma CDN.
-          </div>
+      <section id="instalar">
+        <div class="wrap">
+          <h2>Instalar o OctoCode</h2>
+          <p>Escolha como quer usar o OctoCode:</p>
+          <ul>
+            <li>
+              <span class="dl-mark">Android APKs</span>
+              <div class="dl-body">
+                <strong>Baixar aplicativo Android</strong>
+                <code>https://github.com/SysArchX/OctoCode/releases/latest</code>
+                <span class="dl-meta">4 APKs split por arquitetura</span>
+              </div>
+              <a class="dl-btn" href="https://github.com/SysArchX/OctoCode/releases/latest" rel="noreferrer">Baixar</a>
+            </li>
+            <li>
+              <span class="dl-mark">iOS IPA</span>
+              <div class="dl-body">
+                <strong>Baixar IPA (unsigned)</strong>
+                <code>https://github.com/SysArchX/OctoCode/releases/latest</code>
+                <span class="dl-meta">Para AltStore / SideStore</span>
+              </div>
+              <a class="dl-btn" href="https://github.com/SysArchX/OctoCode/releases/latest" rel="noreferrer">Baixar</a>
+            </li>
+            <li>
+              <span class="dl-mark">PWA</span>
+              <div class="dl-body">
+                <strong>Abrir Web App / PWA</strong>
+                <code>./app/</code>
+                <span class="dl-meta">iPhone e PC · tela cheia, offline e sem instalar nada</span>
+              </div>
+              <a class="dl-btn" href="./app/">Abrir</a>
+            </li>
+          </ul>
+          <a class="download-all" href="https://github.com/SysArchX/OctoCode/releases/latest" rel="noreferrer">
+            Ver todos os arquivos no GitHub <span aria-hidden="true">→</span>
+          </a>
         </div>
       </section>
     </main>
 
     <footer class="footer">
-      <div class="wrap footer-inner">
-        <div class="brand">
-          <span class="brand-mark" aria-hidden="true">
-            <span class="dot"></span><span class="angle">&lt;</span>
-          </span>
-          <span class="brand-name">OctoCode</span>
-        </div>
-        <p>Feito para aprender de verdade · Lázaro / SysArchX</p>
-        <div class="footer-links">
-          <a href="https://github.com/SysArchX/OctoCode" rel="noreferrer">GitHub</a>
-          <a href="#instalar">Instalar</a>
-          <a href="#cursos">Cursos</a>
-        </div>
+      <div class="wrap">
+        <p>
+          Código aberto em
+          <a href="https://github.com/SysArchX/OctoCode" rel="noreferrer"
+            >github.com/SysArchX/OctoCode</a
+          >· progresso salvo no aparelho
+        </p>
       </div>
     </footer>
-
-    <script src="./app.js" defer></script>
   </body>
 </html>
