@@ -33,7 +33,7 @@ jobs:
           java-version: "17"
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Expo prebuild (Android)
         run: bunx expo prebuild --platform android --no-install
@@ -93,7 +93,7 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install
 
       - name: Expo prebuild (iOS)
         run: bunx expo prebuild --platform ios --no-install
