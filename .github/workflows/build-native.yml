@@ -43,13 +43,10 @@ jobs:
           path = Path("android/app/build.gradle")
           source = path.read_text()
           # Gradle 9.x compatível: ignoreAssetsPattern deve manter estrutura original
-          # Apenas garantir que o bloco splits tenha a sintaxe correta
           if "splits {" in source:
-              # Garante que o bloco android tenha sintaxe válida
               source = source.replace(
-                  "android {\n              splits {\n                  abi {\n                      enable true\n",
-                  "android {\n              splits {\n                  abi {\n                      enable true\n                      reset()\n"
-              )
+                  "android {\n              splits {\n                  abi {\n                      enable true",
+                  "android {\n              splits {\n                  abi {\n                      enable true\n                      reset()")
           path.write_text(source)
           print(path.read_text()[:1200])
           PY
@@ -65,10 +62,20 @@ jobs:
           mkdir -p artifacts
           OUT=android/app/build/outputs/apk/release
           ls -lh "$OUT"
-          cp "$OUT/app-arm64-v8a-release.apk" artifacts/OctoCode-arm64-v8a.apk
-          cp "$OUT/app-armeabi-v7a-release.apk" artifacts/OctoCode-armeabi-v7a.apk
-          cp "$OUT/app-x86_64-release.apk" artifacts/OctoCode-x86_64.apk
-          cp "$OUT/app-universal-release.apk" artifacts/OctoCode-universal.apk
+          # Collect all release APKs (universal or split)
+          # First check for universal APK
+          if [ -f "$OUT/app-release.apk" ]; then
+            cp "$OUT/app-release.apk" artifacts/OctoCode-universal.apk
+          else
+            # Collect split APKs
+            cp "$OUT/app-arm64-v8a-release.apk" artifacts/OctoCode-arm64-v8a.apk
+            cp "$OUT/app-armeabi-v7a-release.apk" artifacts/OctoCode-armeabi-v7a.apk
+            cp "$OUT/app-x86_64-release.apk" artifacts/OctoCode-x86_64.apk
+            # Also copy universal if exists
+            if [ -f "$OUT/app-universal-release.apk" ]; then
+              cp "$OUT/app-universal-release.apk" artifacts/OctoCode-universal.apk
+            fi
+          fi
           ls -lh artifacts
 
       - uses: actions/upload-artifact@v4
@@ -144,9 +151,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           publish-dir: ./website
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
 
   release:
     name: Publish on Releases (latest)
