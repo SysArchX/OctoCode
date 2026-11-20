@@ -155,11 +155,22 @@ jobs:
 
       - name: Package unsigned IPA
         run: |
-          APP=$(find ios/build/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" | head -n 1)
-          test -n "$APP"
+          set -x
+          APP=$(find ios/build/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" -print | head -n 1)
+          echo "APP=$APP"
+          if [ -z "$APP" ]; then
+            echo "No .app found under ios/build/Build/Products/Release-iphoneos"
+            exit 1
+          fi
+          ls -ld "$APP"
           rm -rf ipa_tmp && mkdir -p ipa_tmp/Payload
           cp -R "$APP" ipa_tmp/Payload/
           (cd ipa_tmp && zip -qry ../OctoCode-unsigned.ipa Payload)
+          if [ ! -f OctoCode-unsigned.ipa ]; then
+            echo "OctoCode-unsigned.ipa was not created"
+            exit 1
+          fi
+          ls -l OctoCode-unsigned.ipa
 
       - uses: actions/upload-artifact@v4
         with:
