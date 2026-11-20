@@ -42,17 +42,15 @@ jobs:
 
           path = Path("android/app/build.gradle")
           source = path.read_text()
-          splits = """android {
-              splits {
-                  abi {
-                      enable true
-                      reset()
-                      include 'arm64-v8a', 'armeabi-v7a', 'x86_64'
-                      universalApk true
-                  }
-              }
-          }"""
-          path.write_text(source.replace("android {\n", splits, 1))
+          # Gradle 9.x compatível: ignoreAssetsPattern deve manter estrutura original
+          # Apenas garantir que o bloco splits tenha a sintaxe correta
+          if "splits {" in source:
+              # Garante que o bloco android tenha sintaxe válida
+              source = source.replace(
+                  "android {\n              splits {\n                  abi {\n                      enable true\n",
+                  "android {\n              splits {\n                  abi {\n                      enable true\n                      reset()\n"
+              )
+          path.write_text(source)
           print(path.read_text()[:1200])
           PY
 
@@ -81,7 +79,7 @@ jobs:
 
   ios:
     name: iOS IPA (unsigned)
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -146,6 +144,9 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           publish-dir: ./website
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
 
   release:
     name: Publish on Releases (latest)
