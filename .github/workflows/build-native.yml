@@ -35,21 +35,23 @@ jobs:
       - name: Expo prebuild (Android)
         run: npx expo prebuild --platform android --no-install
 
-      - name: Enable ABI splits
+      - name: Enable ABI splits in build.gradle
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
+          cat > android/app/build.gradle << 'GRADLE_EOF'
+          // ... (existing content above)
+          android {
+              // ... other android config
 
-          path = Path("android/app/build.gradle")
-          source = path.read_text()
-          # Gradle 9.x compatível: ignoreAssetsPattern deve manter estrutura original
-          if "splits {" in source:
-              source = source.replace(
-                  "android {\n              splits {\n                  abi {\n                      enable true",
-                  "android {\n              splits {\n                  abi {\n                      enable true\n                      reset()")
-          path.write_text(source)
-          print(path.read_text()[:1200])
-          PY
+              splits {
+                  abi {
+                      enable true
+                      reset()
+                      include "arm64-v8a", "armeabi-v7a", "x86_64"
+                      universalApk true
+                  }
+              }
+          }
+          GRADLE_EOF
 
       - name: Build release APKs
         working-directory: android
@@ -62,31 +64,29 @@ jobs:
           mkdir -p artifacts
           OUT=android/app/build/outputs/apk/release
           ls -lh "$OUT"
-          # Collect all release APKs (universal or split)
-          # First check for universal APK
-          if [ -f "$OUT/app-release.apk" ]; then
-            cp "$OUT/app-release.apk" artifacts/OctoCode-universal.apk
-          else
-            # Collect split APKs
-            cp "$OUT/app-arm64-v8a-release.apk" artifacts/OctoCode-arm64-v8a.apk
-            cp "$OUT/app-armeabi-v7a-release.apk" artifacts/OctoCode-armeabi-v7a.apk
-            cp "$OUT/app-x86_64-release.apk" artifacts/OctoCode-x86_64.apk
-            # Also copy universal if exists
-            if [ -f "$OUT/app-universal-release.apk" ]; then
-              cp "$OUT/app-universal-release.apk" artifacts/OctoCode-universal.apk
-            fi
+
+          # Collect split APKs
+          cp "$OUT"/app-arm64-v8a-release.apk artifacts/OctoCode-arm64-v8a.apk 2>/dev/null || true
+          cp "$OUT"/app-armeabi-v7a-release.apk artifacts/OctoCode-armeabi-v7a.apk 2>/dev/null || true
+          cp "$OUT"/app-x86_64-release.apk artifacts/OctoCode-x86_64.apk 2>/dev/null || true
+
+          # Collect universal APK
+          if [ -f "$OUT/app-universal-release.apk" ]; then
+            cp "$OUT/app-universal-release.apk" artifacts/OctoCode-universal.apk
           fi
+
           ls -lh artifacts
 
       - uses: actions/upload-artifact@v4
         with:
-          name: OctoCode-apk
+          name: apk
           path: artifacts/*.apk
           if-no-files-found: error
 
   ios:
     name: iOS IPA (unsigned)
     runs-on: macos-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
@@ -103,7 +103,7 @@ jobs:
 
       - name: CocoaPods
         working-directory: ios
-        run: pod install --repo-update
+        run: pod install
 
       - name: Build app without code signing
         working-directory: ios
@@ -112,6 +112,7 @@ jobs:
           SCHEME=$(xcodebuild -list -workspace "$WORKSPACE" -json \
             | python3 -c "import json,sys; print(json.load(sys.stdin)['workspace']['schemes'][0])")
           echo "workspace=$WORKSPACE scheme=$SCHEME"
+
           xcodebuild \
             -workspace "$WORKSPACE" \
             -scheme "$SCHEME" \
@@ -127,67 +128,97 @@ jobs:
         run: |
           APP=$(find ios/build/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" | head -1)
           echo "app=$APP"
-          mkdir -p artifacts/Payload
-          cp -R "$APP" artifacts/Payload/
-          cd artifacts
-          zip -qry OctoCode-unsigned.ipa Payload
-          ls -lh OctoCode-unsigned.ipa
+
+          PayloadDir="$(pwd)/ios/build/Build/Products/Release-iphoneos"
+          OLDPWD="$(pwd)"
+
+          mkdir -p "$PayloadDir/Payload"
+          mkdir -p "$OLDPWD/artifacts"
+
+          cp -R "$APP" "$PayloadDir/Payload/"
+          cd "$PayloadDir"
+          zip -qry "$OLDPWD/artifacts/OctoCode-unsigned.ipa" Payload
+          cd "$OLDPWD"
+
+          ls -lh artifacts/OctoCode-unsigned.ipa
 
       - uses: actions/upload-artifact@v4
         with:
-          name: OctoCode-ipa
+          name: ios-ipa
           path: artifacts/OctoCode-unsigned.ipa
           if-no-files-found: error
 
   deploy-pages:
     name: Deploy GitHub Pages
     runs-on: ubuntu-latest
-    needs: [android, ios]
+    if: always()
     steps:
       - uses: actions/checkout@v4
 
+      - name: Copy PWA to website/app
+        run: |
+          mkdir -p website/app
+          cp -r pwa-app/* website/app/
+          ls -lh website/app
+
       - name: Setup Pages
-        uses: actions/deploy-pages@v4
+        uses: actions/configure-pages@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          publish-dir: ./website
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './website'
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
 
   release:
     name: Publish on Releases (latest)
     runs-on: ubuntu-latest
     needs: [android, ios]
-    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+    if: always() && (needs.android.result == 'success' || needs.ios.result == 'success')
     steps:
-      - uses: actions/download-artifact@v4
-        with:
-          path: artifacts
+      - name: Create release directory
+        run: mkdir -p release
 
-      - name: Flatten artifacts
-        run: |
-          mkdir -p dist
-          find artifacts -type f \( -name "*.apk" -o -name "*.ipa" \) -exec cp {} dist/ \;
-          ls -lh dist
+      - name: Download Android APKs
+        uses: actions/download-artifact@v4
+        with:
+          name: apk
+          path: release
+        continue-on-error: true
+
+      - name: Download iOS IPA
+        uses: actions/download-artifact@v4
+        with:
+          name: ios-ipa
+          path: release
+        continue-on-error: true
+
+      - name: List release artifacts
+        run: ls -lh release/
 
       - name: Create or update release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || 'latest' }}
-          name: OctoCode — builds mais recentes
-
+          tag_name: 'latest'
+          name: OctoCode — Latest Builds
           body: |
-            Pacotes gerados automaticamente pelo workflow **Build Native + Deploy GitHub Pages**.
+            Automatic builds generated by the **Build Native + Deploy GitHub Pages** workflow.
 
-            | Pacote | Arquitetura | Uso |
+            | Package | Architecture | Usage |
             | --- | --- | --- |
-            | `OctoCode-universal.apk` | todas | qualquer Android 7+ (~38 MB) |
-            | `OctoCode-arm64-v8a.apk` | arm64 | celulares modernos (~26 MB) |
-            | `OctoCode-armeabi-v7a.apk` | armv7 | celulares antigos (~24 MB) |
-            | `OctoCode-x86_64.apk` | x86_64 | emuladores e Chromebooks (~27 MB) |
+            | `OctoCode-universal.apk` | All ABIs | Any Android 7+ (~38 MB) |
+            | `OctoCode-arm64-v8a.apk` | ARM64 | Modern phones (~26 MB) |
+            | `OctoCode-armeabi-v7a.apk` | ARMv7 | Older phones (~24 MB) |
+            | `OctoCode-x86_64.apk` | x86_64 | Emulators / Chromebooks (~27 MB) |
             | `OctoCode-unsigned.ipa` | arm64 | AltStore / SideStore (~40 MB) |
 
-            O IPA não é assinado: instale via AltStore, SideStore ou assinatura própria.
-
-          files: dist/*
+            The IPA is unsigned: install via AltStore, SideStore, or your own signing.
+          files: release/*
           make_latest: true
           generate_release_notes: true
           fail_on_unmatched_files: true
