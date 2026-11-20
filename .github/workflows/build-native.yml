@@ -2,7 +2,6 @@ name: Build Native + Deploy GitHub Pages
 
 on:
   workflow_dispatch:
-n# Workflow updated: using npm instead of bun
   push:
     branches: [main]
 
@@ -53,7 +52,7 @@ jobs:
                   }
               }
           }"""
-          path.write_text(source.replace("android {\", splits, 1))
+          path.write_text(source.replace("android {\n", splits, 1))
           print(path.read_text()[:1200])
           PY
 
@@ -146,9 +145,6 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          # A pasta website/ contém o app e o pwa-app
-          # O deploy-pages publica a pasta raiz do site
-          # Como o website/ já tem a estrutura correta, publicamos ela
           publish-dir: ./website
 
   release:
