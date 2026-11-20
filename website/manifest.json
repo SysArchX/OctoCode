@@ -1,26 +1,13 @@
 {
-  "name": "OctoCode — aprenda programação de verdade",
-  "short_name": "OctoCode",
-  "description": "Lógica com Portugol, 15 trilhas, OctoCoreOS com terminal POSIX e cybersecurity. Offline no seu aparelho.",
-  "lang": "pt-BR",
-  "start_url": "./index.html",
-  "scope": "./",
-  "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#F6F4FC",
-  "theme_color": "#5B21B6",
-  "icons": [
+  "entrypoint": "worker.js",
+  "compatibilityDate": "2026-11-20",
+  "modules": [
     {
-      "src": "./assets/logo-icon.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./assets/logo-icon.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "name": "worker.js",
+      "type": "esm",
+      "path": "./worker.js"
     }
-  ]
+  ],
+  "assetsDirectory": ".",
+  "spa": true
 }
