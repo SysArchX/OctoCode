@@ -17,8 +17,6 @@ concurrency:
 env:
   EXPO_NO_TELEMETRY: "1"
 
-# Trigger guard: ensure iOS builds use the app scheme, not a sub-lib scheme.
-
 jobs:
   android:
     name: Android APKs (split per ABI)
@@ -117,7 +115,7 @@ jobs:
   ios:
     name: iOS IPA (unsigned)
     runs-on: macos-latest
-    timeout-minutes: 60
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
@@ -139,22 +137,10 @@ jobs:
       - name: Build app without code signing
         working-directory: ios
         run: |
-          set -x
           WORKSPACE=$(ls -d *.xcworkspace | head -1)
-          echo "workspace=$WORKSPACE"
-
-          # Prefer the app scheme (OctoCode). Fall back to the first workspace scheme only if needed.
-          if xcodebuild -list -workspace "$WORKSPACE" -json | python3 -c "
-import json,sys
-schemes = json.load(sys.stdin)['workspace']['schemes']
-sys.exit(0 if 'OctoCode' in schemes else 1)
-"; then
-            SCHEME=OctoCode
-          else
-            SCHEME=$(xcodebuild -list -workspace "$WORKSPACE" -json \
-              | python3 -c "import json,sys; print(json.load(sys.stdin)['workspace']['schemes'][0])")
-          fi
-          echo "scheme=$SCHEME"
+          SCHEME=$(xcodebuild -list -workspace "$WORKSPACE" -json \
+            | python3 -c "import json,sys; print(json.load(sys.stdin)['workspace']['schemes'][0])")
+          echo "workspace=$WORKSPACE scheme=$SCHEME"
 
           xcodebuild \
             -workspace "$WORKSPACE" \
@@ -167,33 +153,13 @@ sys.exit(0 if 'OctoCode' in schemes else 1)
             CODE_SIGN_IDENTITY="" \
             build
 
-          # Accept either the app-name .app or any .app produced by the chosen scheme.
-          APP=$(find build/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" -print | head -n 1)
-          echo "APP=$APP"
-          if [ -z "$APP" ]; then
-            echo "No .app found under build/Build/Products/Release-iphoneos after build"
-            exit 1
-          fi
-          ls -ld "$APP"
-
       - name: Package unsigned IPA
         run: |
-          set -x
-          APP=$(find ios/build/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" -print | head -n 1)
-          echo "APP=$APP"
-          if [ -z "$APP" ]; then
-            echo "No .app found under ios/build/Build/Products/Release-iphoneos"
-            exit 1
-          fi
-          ls -ld "$APP"
+          APP=$(find ios/build/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" | head -n 1)
+          test -n "$APP"
           rm -rf ipa_tmp && mkdir -p ipa_tmp/Payload
           cp -R "$APP" ipa_tmp/Payload/
           (cd ipa_tmp && zip -qry ../OctoCode-unsigned.ipa Payload)
-          if [ ! -f OctoCode-unsigned.ipa ]; then
-            echo "OctoCode-unsigned.ipa was not created"
-            exit 1
-          fi
-          ls -l OctoCode-unsigned.ipa
 
       - uses: actions/upload-artifact@v4
         with:
@@ -275,5 +241,3 @@ sys.exit(0 if 'OctoCode' in schemes else 1)
           make_latest: true
           generate_release_notes: true
           fail_on_unmatched_files: true
-// noop2
-// trigger-c9a2
