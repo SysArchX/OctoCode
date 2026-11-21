@@ -1,0 +1,15 @@
+name: manual-W7MrJyYv
+
+on:
+  workflow_dispatch:
+    inputs:
+      why:
+        description: 'Reason'
+        required: true
+
+jobs:
+  say:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo manual trigger with input
