@@ -137,22 +137,22 @@ jobs:
       - name: Build app without code signing
         working-directory: ios
         run: |
+          set -x
           WORKSPACE=$(ls -d *.xcworkspace | head -1)
-          SCHEME=$(xcodebuild -list -workspace "$WORKSPACE" -json \
-            | python3 -c "import json,sys; print(json.load(sys.stdin)['workspace']['schemes'][0])")
-          echo "workspace=$WORKSPACE scheme=$SCHEME"
+          echo "workspace=$WORKSPACE"
 
-          xcodebuild \
-            -workspace "$WORKSPACE" \
-            -scheme "$SCHEME" \
-            -configuration Release \
-            -sdk iphoneos \
-            -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            build
-
+          # Prefer the app scheme (OctoCode). Fall back to the first workspace scheme only if needed.
+          if xcodebuild -list -workspace "$WORKSPACE" -json | python3 -c "
+import json,sys
+schemes = json.load(sys.stdin)["workspace"]["schemes"]
+sys.exit(0 if "OctoCode" in schemes else 1)
+"; then
+            SCHEME=OctoCode
+          else
+            SCHEME=$(xcodebuild -list -workspace "$WORKSPACE" -json \\
+              | python3 -c "import json,sys; print(json.load(sys.stdin)["workspace"]["schemes"][0])")
+          fi
+          echo "scheme=$SCHEME"
       - name: Package unsigned IPA
         run: |
           APP=$(find ios/build/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" | head -n 1)
