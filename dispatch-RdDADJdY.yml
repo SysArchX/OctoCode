@@ -1,0 +1,16 @@
+name: dispatch-RdDADJdY
+
+on:
+  workflow_dispatch:
+    inputs:
+      cause:
+        description: 'Trigger reason'
+        required: true
+        default: 'manual trigger'
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo hello from dispatch with input
