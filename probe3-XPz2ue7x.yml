@@ -1,0 +1,13 @@
+name: probe3-XPz2ue7x
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: echo probe3
